@@ -1,0 +1,9 @@
+/*
+*= require bootstrap
+*= require themes/ui-lightness/jquery-ui-1.10.3.custom
+*/
+
+label.required { font-style: italic; }
+p.message { padding: 10px; }
+
+div.statistics { height: 150px; }
