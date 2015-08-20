@@ -37,10 +37,10 @@ class Webservice {
         resp.json.metrics*.metric
     }()
 
-    def getAllStats() {
+    def getAllStats(def since, def period, def granularity) {
         def statistics = []
         metrics.each {
-            statistics << getStats(it.system_name)
+            statistics << getStats(it.system_name, since, period, granularity)
         }
         statistics
     }
@@ -49,13 +49,13 @@ class Webservice {
      * Returns the statistics for this webservice
      * @param metric
      */
-    def getStats(def metricSystemName) {
-        def uri = "https://" + grailsApplication.config.threescale.admin_domain + "/stats/services/" + threescale_id + "/usage.json" +
-                "?provider_key=" + grailsApplication.config.threescale.provider_id +
-                "&metric_name=" + metricSystemName +
-                "&since=2014-01-01" +
-                "&period=year" +
-                "&granularity=month" +
+    def getStats(def metricSystemName, def since, def period, def granularity) {
+        def uri = "https://${grailsApplication.config.threescale.admin_domain}/stats/services/${threescale_id}/usage.json" +
+                "?provider_key=${grailsApplication.config.threescale.provider_id}" +
+                "&metric_name=${metricSystemName}" +
+                "&since=${since}" +
+                "&period=${period}" +
+                "&granularity=${granularity}" +
                 "&skip_change=true"
 
         def rest = new RestBuilder()

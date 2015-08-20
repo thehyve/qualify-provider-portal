@@ -19,7 +19,8 @@ class StatsController {
             webservices = user.webservices
         }
 
-        [webservices: webservices, flotData: createFlotData, flotAllData: createFlotAllData]
+        [webservices: webservices, flotData: createFlotData, flotAllData: createFlotAllData,
+            since: params.since ?: "2014-12-01", period: params.period ?: "month", granularity: params.granularity ?: "day"]
     }
 
     def createFlotData = {stats ->
