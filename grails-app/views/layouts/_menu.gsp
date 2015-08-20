@@ -1,5 +1,5 @@
 				<ul class="nav navbar-nav">
-				  <li class="active"><g:link controller="home">Home</g:link></li>
+				  <li><g:link controller="home">Home</g:link></li>
 				  <li><g:link controller="stats">Statistics</g:link></li>
 				  <li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<span class="caret"></span></a>
