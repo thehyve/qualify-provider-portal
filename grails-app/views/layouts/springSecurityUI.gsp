@@ -53,7 +53,6 @@
 		</div> <!-- /container -->
 
 		<asset:javascript src="application.js"/>
-		<asset:javascript src="bootstrap.min.js"/>
 
 <asset:javascript src='jquery/jquery.jgrowl.js' plugin='spring-security-ui'/>
 <asset:javascript src='jquery/jquery.checkbox.js' plugin='spring-security-ui'/>
