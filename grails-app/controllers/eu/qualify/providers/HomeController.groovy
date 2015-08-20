@@ -2,5 +2,5 @@ package eu.qualify.providers
 
 class HomeController {
 
-    def index() { }
+    def index() {}
 }

@@ -2,9 +2,9 @@ import eu.qualify.providers.*
 
 class BootStrap {
 
-    def init = { servletContext ->
+    def init = {servletContext ->
         println "Initializing administrators (if necessary)..."
-        initAdministrators( servletContext )
+        initAdministrators(servletContext)
     }
 
     def initAdministrators = {
@@ -20,7 +20,7 @@ class BootStrap {
         def ADMINPASSWORD = 'qualify-provider-admin'
         def ADMINEMAIL = 'administrator@qualify-fp7.eu'
 
-        if( !User.findByUsername( ADMINUSERNAME ) ) {
+        if (!User.findByUsername(ADMINUSERNAME)) {
             // create user instance. This is done within a transaction,
             // to prevent a 'Hibernate session not found or not bound to thread' exception.
             // See http://stackoverflow.com/questions/5066880/grails-i-hate-and-simply-cant-unerstand-no-hibernate-session-bound-to-curre
@@ -30,10 +30,10 @@ class BootStrap {
                         password: ADMINPASSWORD,
                         email: ADMINEMAIL,
                         enabled: true
-                ).save(flush:true, failOnError: true)
+                ).save(flush: true, failOnError: true)
 
                 // Store roles for this user
-                UserRole.create( user, adminRole, true )
+                UserRole.create(user, adminRole, true)
             }
         }
     }

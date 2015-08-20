@@ -1,7 +1,6 @@
 package eu.qualify.providers
 
 
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -12,7 +11,7 @@ class WebserviceController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Webservice.list(params), model:[webserviceInstanceCount: Webservice.count()]
+        respond Webservice.list(params), model: [webserviceInstanceCount: Webservice.count()]
     }
 
     def show(Webservice webserviceInstance) {
@@ -32,23 +31,23 @@ class WebserviceController {
         }
 
         if (webserviceInstance.hasErrors()) {
-            respond webserviceInstance.errors, [ view:'create', model: [webserviceInstance: webserviceInstance, users: User.list()] ]
+            respond webserviceInstance.errors, [view: 'create', model: [webserviceInstance: webserviceInstance, users: User.list()]]
             return
         }
 
         // Store the newly selected associatedUsers as well
-        params.associatedUsers.each { userId ->
-            webserviceInstance.addToUsers( User.get(userId.toLong()))
+        params.associatedUsers.each {userId ->
+            webserviceInstance.addToUsers(User.get(userId.toLong()))
         }
 
-        webserviceInstance.save flush:true
+        webserviceInstance.save flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: [message(code: 'webservice.label', default: 'Webservice'), webserviceInstance.id])
                 redirect action: "index", method: "GET"
             }
-            '*' { respond webserviceInstance, [status: CREATED] }
+            '*' {respond webserviceInstance, [status: CREATED]}
         }
     }
 
@@ -64,20 +63,20 @@ class WebserviceController {
         }
 
         if (webserviceInstance.hasErrors()) {
-            respond webserviceInstance.errors, [ view:'edit', model: [webserviceInstance: webserviceInstance, users: User.list()] ]
+            respond webserviceInstance.errors, [view: 'edit', model: [webserviceInstance: webserviceInstance, users: User.list()]]
             return
         }
 
         // Store the newly selected associatedUsers as well
-        ( [] + webserviceInstance.users ).each { user ->
-            webserviceInstance.removeFromUsers( user );
+        ([] + webserviceInstance.users).each {user ->
+            webserviceInstance.removeFromUsers(user);
         }
 
-        params.associatedUsers.each { userId ->
-            webserviceInstance.addToUsers( User.get(userId.toLong()))
+        params.associatedUsers.each {userId ->
+            webserviceInstance.addToUsers(User.get(userId.toLong()))
         }
 
-        webserviceInstance.save flush:true
+        webserviceInstance.save flush: true
 
 
         request.withFormat {
@@ -85,7 +84,7 @@ class WebserviceController {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'Webservice.label', default: 'Webservice'), webserviceInstance.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ respond webserviceInstance, [status: OK] }
+            '*' {respond webserviceInstance, [status: OK]}
         }
     }
 
@@ -97,14 +96,14 @@ class WebserviceController {
             return
         }
 
-        webserviceInstance.delete flush:true
+        webserviceInstance.delete flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'Webservice.label', default: 'Webservice'), webserviceInstance.id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' {render status: NO_CONTENT}
         }
     }
 
@@ -114,7 +113,7 @@ class WebserviceController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'webservice.label', default: 'Webservice'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' {render status: NOT_FOUND}
         }
     }
 }
