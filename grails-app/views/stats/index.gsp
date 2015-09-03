@@ -1,7 +1,5 @@
 <h1>Statistics</h1>
 
-<g:set var="granularity" value="day" />
-
 <div>
   <form action="index" class="form-inline">
     <input class="form-control" type="date" name="since" value="${since}" />
@@ -26,7 +24,11 @@
 
         <div id="statistics-${webservice.id}" class="statistics"></div>
         <asset:script type="text/javascript">
-          $.plot( '#statistics-${webservice.id}', ${flotAllData(webservice.getAllStats(since, period, granularity))}, { xaxis: { mode: 'time', timeformat: '%Y/%m' } } );
+          $.plot( '#statistics-${webservice.id}',
+                  ${flotAllData(webservice.getAllStats(since, period, granularity))},
+                  { xaxis: { mode: 'time',
+                             timeformat: "${timeformat}",
+                             monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} } );
         </asset:script>
       </li>
     </g:each>

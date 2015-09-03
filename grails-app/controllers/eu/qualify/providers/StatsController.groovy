@@ -5,6 +5,20 @@ import groovy.json.JsonBuilder
 class StatsController {
     def springSecurityService
 
+    private static final timeFormatForPeriod = [
+            year: "%b %Y",
+            month: "%b %d",
+            week: "%b %d",
+            day: "%b %d %H:%M"
+    ]
+
+    private static final granularityForPeriod = [
+            year: "month",
+            month: "day",
+            week: "day",
+            day: "hour"
+    ]
+
     // Shows statistics about the webservices the current user has access to
     def index() {
         def user = springSecurityService.currentUser
@@ -19,8 +33,16 @@ class StatsController {
             webservices = user.webservices
         }
 
-        [webservices: webservices, flotData: createFlotData, flotAllData: createFlotAllData,
-            since: params.since ?: "2014-12-01", period: params.period ?: "month", granularity: params.granularity ?: "day"]
+        def since = params.since ?: "2014-12-01"
+        def period = params.period ?: "month"
+        [webservices: webservices,
+            flotData: createFlotData,
+            flotAllData: createFlotAllData,
+            since: since,
+            period: period,
+            granularity: granularityForPeriod[period],
+            timeformat: timeFormatForPeriod[period]
+        ]
     }
 
     def createFlotData = {stats ->
