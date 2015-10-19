@@ -21,7 +21,7 @@ class ThreescaleService {
         )
 
         if( data ) {
-            data.metrics*.metric
+            data.json.metrics*.metric
         } else {
             []
         }
@@ -46,7 +46,25 @@ class ThreescaleService {
             .addParameter("skip_change", "true")
         )
 
-        data ?: [:]
+        data ? data.json : [:]
+    }
+
+    /**
+     * Returns a list of applications for the given webservice
+     * @param webservice
+     * @param per_page      Number of applications per page. Defaults to 100
+     * @param page          Page number to return. Defaults to 1
+     * @return
+     */
+    def getApplications(Webservice webservice, int per_page = 100, int page = 1) {
+        def data = call( builder()
+                .setPath( "/admin/api/applications.json" )
+                .addParameter("page", page.toString())
+                .addParameter("per_page", per_page.toString())
+                .addParameter("service_id", webservice.threescale_id)
+        )
+
+        data ? data.json.applications*.application : []
     }
 
     /**
@@ -58,11 +76,11 @@ class ThreescaleService {
         def resp = rest.get(uri)
 
         if (resp.statusCode != HttpStatus.OK) {
-            log.warn("No datat could be retrieved for call " + uri + " (code " + resp.statusCode + "): " + resp.json)
+            log.warn("No data could be retrieved for call " + uri + " (code " + resp.statusCode + "): " + resp.json)
             return null
         }
 
-        return resp.json
+        return resp
     }
 
     /**

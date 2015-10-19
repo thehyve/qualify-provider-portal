@@ -20,4 +20,16 @@ class WebserviceService {
             user.webservices
         }
     }
+
+    /**
+     * Checks whether this webservice can be accessed by the user
+     * Administrators have access to all webservices
+     */
+    def canAccess(Webservice webservice, User user) {
+        if (adminRole.id in user.authorities*.id) {
+            true
+        } else {
+            webservice.id in user.webservices*.id
+        }
+    }
 }

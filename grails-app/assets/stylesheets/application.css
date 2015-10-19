@@ -1,9 +1,12 @@
 /*
 *= require bootstrap
 *= require themes/ui-lightness/jquery-ui-1.10.3.custom
+*= require spinner.css
 */
 
 label.required { font-style: italic; }
 p.message { padding: 10px; }
 
 div.statistics { height: 150px; }
+
+.applications h2 { cursor: pointer }

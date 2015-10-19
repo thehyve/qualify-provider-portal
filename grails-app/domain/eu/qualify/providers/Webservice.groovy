@@ -3,6 +3,7 @@ package eu.qualify.providers
 
 class Webservice {
     transient def threescaleService
+    transient def webserviceService
 
     String name
     String threescale_id
@@ -45,5 +46,14 @@ class Webservice {
      */
     def getStats(def metricSystemName, def since, def period, def granularity) {
         threescaleService.getStats(this, metricSystemName, since, period, granularity)
+    }
+
+    /**
+     * Checks whether the given user is allowed to access this webservice
+     * @param user
+     * @return
+     */
+    def canAccess(User user) {
+        webserviceService.canAccess(this, user)
     }
 }
