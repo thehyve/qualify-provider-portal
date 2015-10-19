@@ -4,6 +4,7 @@ import groovy.json.JsonBuilder
 
 class StatsController {
     def springSecurityService
+    def webserviceService
 
     private static final timeFormatForPeriod = [
             year: "%b %Y",
@@ -21,21 +22,11 @@ class StatsController {
 
     // Shows statistics about the webservices the current user has access to
     def index() {
-        def user = springSecurityService.currentUser
-
-        // Retrieve webservices the current user has access to
-        // Administrators have access to all webservices
-        def adminRole = Role.findByAuthority("ROLE_ADMIN")
-        def webservices
-        if (adminRole in user.authorities) {
-            webservices = Webservice.findAll()
-        } else {
-            webservices = user.webservices
-        }
+        def webservices = webserviceService.getWebservicesFor(springSecurityService.currentUser)
 
         def since = params.since ?: "2014-12-01"
         def period = params.period ?: "month"
-        [webservices: webservices,
+        [   webservices: webservices,
             flotData: createFlotData,
             flotAllData: createFlotAllData,
             since: since,
