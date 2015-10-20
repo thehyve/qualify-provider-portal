@@ -9,4 +9,13 @@ p.message { padding: 10px; }
 
 div.statistics { height: 150px; }
 
+/* Applications list */
 .applications h2 { cursor: pointer }
+.applications table .description { max-width: 150px; }
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}

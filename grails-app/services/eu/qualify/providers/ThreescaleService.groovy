@@ -57,14 +57,42 @@ class ThreescaleService {
      * @return
      */
     def getApplications(Webservice webservice, int per_page = 100, int page = 1) {
+        // Using XML retrieval here as it returns more information per application
         def data = call( builder()
-                .setPath( "/admin/api/applications.json" )
+                .setPath( "/admin/api/applications.xml" )
                 .addParameter("page", page.toString())
                 .addParameter("per_page", per_page.toString())
                 .addParameter("service_id", webservice.threescale_id)
         )
 
-        data ? data.json.applications*.application : []
+        data ? data.xml.children().collect { convertXmlToMap(it) } : []
+    }
+
+    /**
+     * Returns information about the given application
+     * @param applicationId
+     */
+    def getApplicationInfo(Long accountId, Long applicationId) {
+        // Using XML retrieval here as it returns more information per application
+        def data = call( builder()
+                .setPath( "/admin/api/accounts/" + accountId + "/applications/" + applicationId + ".xml" )
+        )
+
+        data ? convertXmlToMap(data.xml) : [:]
+    }
+
+    /**
+     * Returns information about the given account
+     * @param accountId
+     * @return
+     */
+    def getAccountInfo(Long accountId) {
+        // Using XML retrieval here as it returns more information for an account
+        def data = call( builder()
+                .setPath( "/admin/api/accounts/" + accountId + ".xml" )
+        )
+
+        data ? convertXmlToMap(data.xml, [ "plans", "users" ]) : [:]
     }
 
     /**
@@ -81,6 +109,26 @@ class ThreescaleService {
         }
 
         return resp
+    }
+
+    /**
+     * Utility method to convert an XML element into a map
+     * @param nodes
+     * @return
+     */
+    protected def convertXmlToMap(nodes, convertToList = []) {
+        nodes.children().collectEntries {
+            if( it.childNodes() ) {
+                // Convert some of the tag names to a list
+                if( it.name() in convertToList ) {
+                    [ it.name(), it.children().collect { convertXmlToMap( it, convertToList ) } ]
+                } else {
+                    [ it.name(), convertXmlToMap(it, convertToList) ]
+                }
+            } else {
+                [ it.name(), it.text() ]
+            }
+        }
     }
 
     /**
