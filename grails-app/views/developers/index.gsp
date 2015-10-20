@@ -1,3 +1,5 @@
+<asset:javascript src="developer-applications.js"/>
+
 <h1>Application list</h1>
 
 <g:if test="${webservices}">

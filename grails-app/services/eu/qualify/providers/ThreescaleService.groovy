@@ -71,7 +71,7 @@ class ThreescaleService {
      * Generic method to make calls to the 3scale API
      */
     def call(String uri) {
-        log.info( "Making request to " + uri )
+        log.debug( "Making request to " + uri )
         def rest = new RestBuilder()
         def resp = rest.get(uri)
 

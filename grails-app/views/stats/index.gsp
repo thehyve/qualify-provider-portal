@@ -24,11 +24,13 @@
 
         <div id="statistics-${webservice.id}" class="statistics"></div>
         <asset:script type="text/javascript">
-          $.plot( '#statistics-${webservice.id}',
-                  ${flotAllData(webservice.getAllStats(since, period, granularity))},
-                  { xaxis: { mode: 'time',
-                             timeformat: "${timeformat}",
-                             monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} } );
+        	$(function() {
+			  $.plot( '#statistics-${webservice.id}',
+					  ${flotAllData(webservice.getAllStats(since, period, granularity))},
+					  { xaxis: { mode: 'time',
+								 timeformat: "${timeformat}",
+								 monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} } );
+			});
         </asset:script>
       </li>
     </g:each>
