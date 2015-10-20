@@ -5,7 +5,7 @@
 <g:if test="${webservices}">
   <ul class="applications">
     <g:each in="${webservices}" var="webservice">
-      <li>
+      <li id="service-${webservice.threescale_id}">
         <h2>${webservice.name}</h2>
 
 		<div class="applicationList" data-webservice-id="${webservice.threescale_id}" data-url="${g.createLink(controller: 'developers', action: 'loadApplications', params: [ service_id: webservice.threescale_id ] )}">

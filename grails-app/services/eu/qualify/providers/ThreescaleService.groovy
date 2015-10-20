@@ -96,6 +96,47 @@ class ThreescaleService {
     }
 
     /**
+     * Accepts an application that is in the pending state
+     * @param accountId
+     * @param applicationId
+     */
+    def acceptApplication(Long accountId, Long applicationId) {
+        def response = put( builder()
+            .setPath( "/admin/api/accounts/" + accountId + "/applications/" + applicationId + "/accept.xml" )
+        )
+
+        return response.statusCode == HttpStatus.OK
+    }
+
+    /**
+     * Suspends an application that is in the live state
+     * @param accountId
+     * @param applicationId
+     */
+    def suspendApplication(Long accountId, Long applicationId) {
+        def response = put( builder()
+                .setPath( "/admin/api/accounts/" + accountId + "/applications/" + applicationId + "/suspend.xml" )
+        )
+
+        return response.statusCode == HttpStatus.OK
+    }
+
+
+    /**
+     * Resumes an application that is in the suspended state
+     * @param accountId
+     * @param applicationId
+     */
+    def resumeApplication(Long accountId, Long applicationId) {
+        def response = put( builder()
+                .setPath( "/admin/api/accounts/" + accountId + "/applications/" + applicationId + "/resume.xml" )
+        )
+
+        return response.statusCode == HttpStatus.OK
+    }
+
+
+    /**
      * Generic method to make calls to the 3scale API
      */
     def call(String uri) {
@@ -104,8 +145,39 @@ class ThreescaleService {
         def resp = rest.get(uri)
 
         if (resp.statusCode != HttpStatus.OK) {
-            log.warn("No data could be retrieved for call " + uri + " (code " + resp.statusCode + "): " + resp.json)
+            log.warn("No data could be retrieved for call " + uri + " (code " + resp.statusCode + "): " + resp.body)
             return null
+        }
+
+        return resp
+    }
+
+    /**
+     * Generic method to make calls to the 3scale API
+     */
+    def call(URIBuilder builder) { call(builder.toString()) }
+
+    /**
+     * Generic method to make PUT calls to the 3scale API
+     */
+    def put(URIBuilder builder) {
+        // Send the parameters in the PUT body instead of in the URL
+        def parameters = builder.queryParams
+        builder.removeQuery()
+
+        def uri = builder.toString()
+
+        log.debug( "Making PUT request to " + uri + " with parameters " + parameters )
+
+        def rest = new RestBuilder()
+        def resp = rest.put(uri) {
+            parameters.each { nameValuePair ->
+                setProperty(nameValuePair.name, nameValuePair.value)
+            }
+        }
+
+        if (resp.statusCode != HttpStatus.OK) {
+            log.warn("An error occurred when contacting 3scale with the call " + uri + " (code " + resp.statusCode + "): " + resp.body)
         }
 
         return resp
@@ -130,11 +202,6 @@ class ThreescaleService {
             }
         }
     }
-
-    /**
-     * Generic method to make calls to the 3scale API
-     */
-    def call(URIBuilder builder) { call(builder.toString()) }
 
     /**
      * Generic method to make calls to the 3scale API
