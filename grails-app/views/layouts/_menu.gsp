@@ -1,6 +1,7 @@
 <ul class="nav navbar-nav">
   <li><g:link controller="home">Home</g:link></li>
   <li><g:link controller="stats">Statistics</g:link></li>
+  <li><g:link controller="developers">Applications</g:link></li>
 
   <sec:access controller="webservice">
 	  <li class="dropdown">
