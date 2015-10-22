@@ -7,7 +7,7 @@
 label.required { font-style: italic; }
 p.message { padding: 10px; }
 
-div.statistics { height: 150px; }
+div.statistics.loaded { height: 150px; }
 
 /* Applications list */
 .applications h2 { cursor: pointer }

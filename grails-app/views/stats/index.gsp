@@ -1,7 +1,8 @@
+<asset:javascript src="statistics.js"/>
 <h1>Statistics</h1>
 
 <div>
-  <form action="index" class="form-inline">
+  <form action="index" class="form-inline" id="stats-form">
     <input class="form-control" type="date" name="since" value="${since}" />
     <select class="form-control selectpicker" name="period" value="${period}">
       <option>day</option>
@@ -17,21 +18,12 @@
 </div>
 
 <g:if test="${webservices}">
-  <ul>
+  <ul class="stats">
     <g:each in="${webservices}" var="webservice">
       <li>
         <h2>${webservice.name}</h2>
 
-        <div id="statistics-${webservice.id}" class="statistics"></div>
-        <asset:script type="text/javascript">
-        	$(function() {
-			  $.plot( '#statistics-${webservice.id}',
-					  ${flotAllData(webservice.getAllStats(since, period, granularity))},
-					  { xaxis: { mode: 'time',
-								 timeformat: "${timeformat}",
-								 monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]} } );
-			});
-        </asset:script>
+        <div id="statistics-${webservice.id}" class="statistics" data-webservice-id="${webservice.id}" data-url="${g.createLink(controller: 'stats', action: 'loadStats', params: [ service_id: webservice.threescale_id ] )}"></div>
       </li>
     </g:each>
   </ul>

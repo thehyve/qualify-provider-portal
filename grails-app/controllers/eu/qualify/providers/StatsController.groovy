@@ -1,6 +1,7 @@
 package eu.qualify.providers
 
 import groovy.json.JsonBuilder
+import grails.converters.JSON
 
 class StatsController {
     def springSecurityService
@@ -27,13 +28,28 @@ class StatsController {
         def since = params.since ?: "2014-12-01"
         def period = params.period ?: "month"
         [   webservices: webservices,
-            flotData: createFlotData,
-            flotAllData: createFlotAllData,
             since: since,
             period: period,
-            granularity: granularityForPeriod[period],
-            timeformat: timeFormatForPeriod[period]
         ]
+    }
+
+    def loadStats() {
+        // Check if the user is allowed to access this webservice data
+        def webservice = checkWebservice(params.service_id)
+        if(!webservice)
+            return
+
+        // Fetch statistics based on the url parameters
+        def since = params.since ?: "2014-12-01"
+        def period = params.period ?: "month"
+        def granularity = granularityForPeriod[period]
+        def timeFormat = timeFormatForPeriod[period]
+
+        def stats = webservice.getAllStats(since, period, granularity)
+
+        // Render output
+        def output = [ statistics: createFlotAllData(stats), timeFormat: timeFormat ]
+        render output as JSON
     }
 
     def createFlotData = {stats ->
@@ -79,7 +95,29 @@ class StatsController {
             flotData << [label: stat.metric.name, data: createFlotData(stat)]
         }
 
-        return new JsonBuilder(flotData).toPrettyString()
+        flotData
+    }
+
+
+    /**
+     * Checks whether the user is allowed to access the given webservice
+     * @param serviceId
+     * @return Webservice object or null if the user is not allowed to access the webservice
+     */
+    protected def checkWebservice(serviceId) {
+        def webservice = Webservice.findByThreescale_id(serviceId.toString())
+
+        if( !webservice ) {
+            render status: 404, text: "Webservice not found"
+            return null
+        }
+
+        if( !webservice.canAccess(springSecurityService.currentUser) ) {
+            render status: 403, text: "Forbidden"
+            return null
+        }
+
+        return webservice
     }
 
 }
