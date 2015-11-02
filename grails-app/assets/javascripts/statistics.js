@@ -1,7 +1,7 @@
 //= require jquery
 
 if( typeof(QSP) == 'undefined' )
-	QSP = {}
+	QSP = {};
 
 QSP.Statistics = {
 	init: function() {

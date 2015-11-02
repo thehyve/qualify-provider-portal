@@ -3,8 +3,7 @@
 //= require utils
 
 if( typeof(QSP) == 'undefined' )
-	QSP = {}
-
+	QSP = {};
 
 QSP.Developers = {
 	init: function() {

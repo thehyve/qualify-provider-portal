@@ -14,4 +14,4 @@ var Utils = {
 	spinner: function() {
     	return '<span class="glyphicon glyphicon-refresh glyphicon-spin spinner"></span>';
     }
-}
+};
