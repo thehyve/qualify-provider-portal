@@ -19,3 +19,7 @@ div.statistics.loaded { height: 150px; }
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
 }
+
+/* Webservices Form */
+select.associated-users { height: 200px; }
+label small { font-weight: normal; display: block; }

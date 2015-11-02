@@ -23,12 +23,15 @@
 </div>
 
 <div class="form-group">
-  <label for="users" class="col-sm-2 control-label"><g:message
-      code="webservice.users.label" default="Users with access"/></label>
+  <label for="users" class="col-sm-2 control-label">
+  	<g:message
+      code="webservice.users.label" default="Users with access"/>
+      <small>Please select all users that have access to this webservice, not only the ones to add.</small>
+     </label>
 
   <div class="col-sm-10">
     <g:select name="associatedUsers" multiple="true" from="${users}"
               value="${webserviceInstance?.users*.id}" optionValue="username"
-              class="form-control" optionKey="id"/>
+              class="form-control associated-users" optionKey="id"/>
   </div>
 </div>
